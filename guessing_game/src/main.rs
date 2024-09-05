@@ -4,7 +4,6 @@ use std::io;
 fn main() {
     println!("Guess the Number");
 
-    // Generate a random number between 1 and 100
     let secret_number: u32 = rand::thread_rng().gen_range(1..=100);
     loop {
         println!("Please input your guess");
@@ -14,8 +13,13 @@ fn main() {
             .read_line(&mut guess)
             .expect("failed to read user input");
 
-        // Parse the input guess as a u32
-        let guess: u32 = guess.trim().parse().expect("failed to parse");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please add a valid input");
+                continue;
+            }
+        };
         match guess.cmp(&secret_number) {
             Ordering::Equal => {
                 println!("you won");
